@@ -53,9 +53,9 @@ export default function WeatherCard({ data, forecast }) {
 
   if (!data || !forecast) {
     return (
-      <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 md:p-8 text-center">
-        <div className="animate-spin rounded-full h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 border-t-2 border-b-2 border-emerald-500 mx-auto mb-4"></div>
-        <p className="text-gray-600 text-sm sm:text-base">Loading weather data...</p>
+      <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-500 mx-auto mb-4"></div>
+        <p className="text-gray-600">Loading weather data...</p>
       </div>
     );
   }
@@ -101,6 +101,7 @@ export default function WeatherCard({ data, forecast }) {
     precip: forecast.hourly.precipitation_probability[index],
   }));
 
+  // Simulated monthly data (since API provides only 7 days)
   const monthlyData = Array.from({ length: 30 }, (_, i) => {
     const date = new Date();
     date.setDate(date.getDate() - (29 - i));
@@ -108,33 +109,33 @@ export default function WeatherCard({ data, forecast }) {
     const baseMin = forecast.daily.temperature_2m_min[0] || 10;
     return {
       day: getMonthDay(date),
-      max: baseMax + (Math.random() * 4 - 2),
+      max: baseMax + (Math.random() * 4 - 2), // Random variation ±2°C
       min: baseMin + (Math.random() * 4 - 2),
     };
   });
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg overflow-hidden max-w-full mx-auto sm:max-w-3xl md:max-w-4xl lg:max-w-6xl">
+    <div className="bg-white rounded-2xl shadow-lg overflow-hidden max-w-6xl mx-auto">
       {/* Hero Section */}
-      <div className="bg-teal-800 p-4 sm:p-6 md:p-8 text-white flex flex-col items-center">
+      <div className="bg-teal-800 p-8 text-white flex flex-col items-center">
         {/* Main Weather Info (Centered) */}
-        <div className="flex flex-col items-center text-center animate-fade-in mb-4 sm:mb-6" style={{ animationDelay: "0.2s" }}>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">Pune, India</h1>
-          <p className="text-white/90 text-sm sm:text-lg md:text-xl flex items-center gap-2 mb-2 sm:mb-4">
-            <Calendar className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
+        <div className="flex flex-col items-center text-center animate-fade-in mb-6" style={{ animationDelay: "0.2s" }}>
+          <h1 className="text-4xl font-bold mb-2">Pune, India</h1>
+          <p className="text-white/90 text-xl flex items-center gap-2 mb-4">
+            <Calendar className="w-6 h-6" />
             Sunday, September 14, 2025
           </p>
-          <CloudRain className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 mb-2 sm:mb-3" />
-          <div className="text-4xl sm:text-5xl md:text-7xl font-light mb-1 sm:mb-2">24°C</div>
-          <div className="text-lg sm:text-xl md:text-2xl font-medium mb-2 sm:mb-3">Feels like 28°C</div>
-          <p className="text-lg sm:text-xl md:text-2xl font-semibold bg-white/30 backdrop-blur-lg rounded-full px-4 sm:px-5 md:px-6 py-1 sm:py-1.5 md:py-2 shadow-md">
+          <CloudRain className="w-20 h-20 mb-3" />
+          <div className="text-7xl font-light mb-2">24°C</div>
+          <div className="text-2xl font-medium mb-3">Feels like 28°C</div>
+          <p className="text-2xl font-semibold bg-white/30 backdrop-blur-lg rounded-full px-6 py-2 shadow-md">
             Rain showers
           </p>
         </div>
 
-        {/* Weather Details (Responsive Grid) */}
-        <div className="w-full max-w-full sm:max-w-2xl md:max-w-5xl">
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 sm:gap-3">
+        {/* Weather Details (One Row Below) */}
+        <div className="w-full max-w-5xl">
+          <div className="grid grid-cols-5 gap-3">
             {[
               { icon: Thermometer, label: "Feels Like", value: "28°C", color: "text-amber-200" },
               { icon: Gauge, label: "Pressure", value: "1007.8 hPa", color: "text-purple-200" },
@@ -146,12 +147,12 @@ export default function WeatherCard({ data, forecast }) {
               return (
                 <div
                   key={index}
-                  className="bg-white/30 backdrop-blur-lg rounded-xl p-2 sm:p-3 flex flex-col items-center shadow-md animate-fade-in"
+                  className="bg-white/30 backdrop-blur-lg rounded-xl p-3 flex flex-col items-center shadow-md animate-fade-in"
                   style={{ animationDelay: `${0.4 + index * 0.1}s` }}
                 >
-                  <ItemIcon className={`w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 ${item.color} mb-1 sm:mb-2`} />
-                  <p className="text-xs sm:text-sm font-medium text-white/90">{item.label}</p>
-                  <p className="text-sm sm:text-lg md:text-xl font-semibold text-white">{item.value}</p>
+                  <ItemIcon className={`w-7 h-7 ${item.color} mb-2`} />
+                  <p className="text-sm font-medium text-white/90">{item.label}</p>
+                  <p className="text-xl font-semibold text-white">{item.value}</p>
                 </div>
               );
             })}
@@ -159,12 +160,13 @@ export default function WeatherCard({ data, forecast }) {
         </div>
       </div>
 
-      {/* Navigation Buttons (Responsive) */}
-      <div className="flex flex-wrap gap-1 sm:gap-2 p-2 sm:p-3 md:p-4 bg-gray-50 justify-center">
+      {/* Navigation Buttons (Horizontal Below Hero Section) */}
+      <div className="flex flex-wrap gap-2 p-4 bg-gray-50 justify-center">
         {[
           { id: "overview", label: "Overview", icon: Activity },
           { id: "hourly", label: "Hourly", icon: Clock },
           { id: "forecast", label: "Daily", icon: Calendar },
+          
           { id: "monthly", label: "Monthly", icon: Calendar },
         ].map((tab) => {
           const TabIcon = tab.icon;
@@ -172,13 +174,13 @@ export default function WeatherCard({ data, forecast }) {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 md:py-3 rounded-lg font-medium text-xs sm:text-sm md:text-base transition-all duration-200 ${
+              className={`flex items-center gap-2 px-4 py-3 rounded-lg font-medium transition-all duration-200 ${
                 activeTab === tab.id
                   ? "bg-emerald-500 text-white shadow-md"
                   : "text-gray-700 hover:bg-gray-200"
               }`}
             >
-              <TabIcon className="w-3 h-3 sm:w-4 sm:h-4" />
+              <TabIcon className="w-4 h-4" />
               {tab.label}
             </button>
           );
@@ -186,21 +188,21 @@ export default function WeatherCard({ data, forecast }) {
       </div>
 
       {/* Tab Content */}
-      <div className="p-4 sm:p-5 md:p-6 space-y-4 sm:space-y-6 max-w-full mx-auto">
+      <div className="p-6 space-y-6 max-w-6xl mx-auto">
         {activeTab === "overview" && (
-          <div className="space-y-4 sm:space-y-6">
+          <div className="space-y-6">
             {/* Temperature Trend */}
-            <div className="bg-gray-50 rounded-xl p-3 sm:p-4">
-              <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3 flex items-center gap-2">
-                <Thermometer className="w-4 h-4 sm:w-5 sm:h-5 text-amber-500" />
+            <div className="bg-gray-50 rounded-xl p-4">
+              <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                <Thermometer className="w-5 h-5 text-amber-500" />
                 Temperature Trend
               </h3>
-              <div className="h-48 sm:h-56 md:h-64">
+              <div className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={temperatureChartData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
-                    <XAxis dataKey="day" textAnchor="middle" fontSize={12} />
-                    <YAxis fontSize={12} />
+                    <XAxis dataKey="day" />
+                    <YAxis />
                     <Tooltip />
                     <Bar dataKey="max" fill="#FBBF24" radius={[4, 4, 0, 0]} />
                     <Bar dataKey="min" fill="#34D399" radius={[4, 4, 0, 0]} />
@@ -212,18 +214,18 @@ export default function WeatherCard({ data, forecast }) {
         )}
 
         {activeTab === "hourly" && (
-          <div className="bg-gray-50 rounded-xl p-3 sm:p-4">
-            <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3 flex items-center gap-2">
-              <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500" />
+          <div className="bg-gray-50 rounded-xl p-4">
+            <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
+              <Clock className="w-5 h-5 text-emerald-500" />
               Hourly Forecast
             </h3>
-            <div className="h-48 sm:h-56 md:h-64">
+            <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={hourlyData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
-                  <XAxis dataKey="hour" textAnchor="middle" fontSize={12} />
-                  <YAxis yAxisId="left" fontSize={12} />
-                  <YAxis yAxisId="right" orientation="right" fontSize={12} />
+                  <XAxis dataKey="hour" />
+                  <YAxis yAxisId="left" />
+                  <YAxis yAxisId="right" orientation="right" />
                   <Tooltip />
                   <Line yAxisId="left" type="monotone" dataKey="temp" stroke="#FBBF24" strokeWidth={2} />
                   <Line yAxisId="right" type="monotone" dataKey="precip" stroke="#34D399" strokeDasharray="5 5" />
@@ -234,24 +236,24 @@ export default function WeatherCard({ data, forecast }) {
         )}
 
         {activeTab === "forecast" && (
-          <div className="bg-gray-50 rounded-xl p-3 sm:p-4">
-            <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-3 sm:mb-4">Daily Forecast</h3>
-            <div className="space-y-2 sm:space-y-3">
+          <div className="bg-gray-50 rounded-xl p-4">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">Daily Forecast</h3>
+            <div className="space-y-3">
               {forecast.daily.time.slice(0, 7).map((date, index) => {
                 const isToday = index === 0;
                 const DayWeatherIcon = weatherIcons[forecast.daily.weathercode[index]] || Cloud;
                 return (
-                  <div key={date} className={`rounded-xl p-3 sm:p-4 flex items-center gap-2 sm:gap-4 ${isToday ? 'bg-emerald-500 text-white' : 'bg-white'}`}>
-                    <DayWeatherIcon className={`w-6 h-6 sm:w-8 sm:h-8 ${isToday ? 'text-white' : 'text-emerald-500'}`} />
+                  <div key={date} className={`rounded-xl p-4 flex items-center gap podp-4 ${isToday ? 'bg-emerald-500 text-white' : 'bg-white'}`}>
+                    <DayWeatherIcon className={`w-8 h-8 ${isToday ? 'text-white' : 'text-emerald-500'}`} />
                     <div className="flex-1">
-                      <div className={`font-medium text-sm sm:text-base ${isToday ? 'text-white' : 'text-gray-700'}`}>
+                      <div className={`font-medium ${isToday ? 'text-white' : 'text-gray-700'}`}>
                         {isToday ? 'Today' : getDayName(date)}
                       </div>
                       <div className={`text-xs ${isToday ? 'text-white/80' : 'text-gray-600'}`}>
                         Precip: {forecast.daily.precipitation_sum[index]} mm • UV: {forecast.daily.uv_index_max[index]}
                       </div>
                     </div>
-                    <div className={`text-base sm:text-lg md:text-xl font-bold ${isToday ? 'text-white' : 'text-gray-800'}`}>
+                    <div className={`text-xl font-bold ${isToday ? 'text-white' : 'text-gray-800'}`}>
                       {Math.round(forecast.daily.temperature_2m_max[index])}° / {Math.round(forecast.daily.temperature_2m_min[index])}°
                     </div>
                   </div>
@@ -261,18 +263,20 @@ export default function WeatherCard({ data, forecast }) {
           </div>
         )}
 
+       
+
         {activeTab === "monthly" && (
-          <div className="bg-gray-50 rounded-xl p-3 sm:p-4">
-            <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3 flex items-center gap-2">
-              <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500" />
+          <div className="bg-gray-50 rounded-xl p-4">
+            <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
+              <Calendar className="w-5 h-5 text-emerald-500" />
               Monthly Temperature Trend
             </h3>
-            <div className="h-48 sm:h-56 md:h-64">
+            <div className="h-64 max-w-4xl">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={monthlyData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
-                  <XAxis dataKey="day" textAnchor="middle" fontSize={12} />
-                  <YAxis fontSize={12} />
+                  <XAxis dataKey="day" />
+                  <YAxis />
                   <Tooltip />
                   <Line type="monotone" dataKey="max" stroke="#FBBF24" strokeWidth={2} />
                   <Line type="monotone" dataKey="min" stroke="#34D399" strokeWidth={2} />
